@@ -1,0 +1,38 @@
+{% extends "STG/layout.html" %}
+{% load static %}
+{% block body %}
+
+
+<div class="container">
+    <h1 class="text-3xl font-bold underline">Standard Treatment Guidelines</h1>
+    <button class="rounded-full bg-cyan-500 hover:bg-cyan-600" id="interactionSearchButton">Interaction Checker</button>
+    <!-- Topic Lister -->
+    <div id="topicList">
+    </div>
+    <!-- topic presentation-->
+    <div id="topicPresentation">
+    </div>
+    <!-- drug interaction checker-->
+    <div class="list-disc" style="display:none;"></div>
+    <div class="list-decimal" style="display: none;"></div>
+    <div class="list-item" style="display: none;"></div>
+    <div id="drugInteractionChecker" style="display: none;">
+        <form id="interactionCheckerForm">
+            <input type="radio" checked="checked" id="interaction" name="interacter" value="Interaction">
+            <label for="interaction">Single Drug</label>
+            <input type="radio" id="list"  name="interacter" value="list">
+            <label for="list">Compare Drugs</label>
+            <div class="searchBoxDisplay" style="display:block;">
+                <input id="searchBox" name="search" type="text" placeholder="Enter the drug(s)">
+                <input type="button" class="rounded-full bg-cyan-500 hover:bg-cyan-600" id="searchButton" value="Search">
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+
+{% endblock %} 
+{% block script %}
+<script src="{% static 'STG/index.js' %}"></script>
+{% endblock %}
