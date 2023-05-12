@@ -15,13 +15,9 @@ function getTopics() {
 		// Creat an unordered list to add the topics to 
 		let unorderedTopicList = document.createElement('ul');
 		let find_topic_list_div = document.querySelector('#topicList');
-		unorderedTopicList.classList.add("list-disc");
-
 
 		for (let i = 0; i < total_topics; i++) {
 			let listItem = document.createElement('li');
-			listItem.classList.add('list-item')
-
 			//console.log(topicz[i])
 			listItem.innerText = topicz[i][0]["Level 1 Heading"];
 
@@ -43,12 +39,12 @@ function getTopics() {
 				// Creat an unordered list to add the topics to 
 				let unorderedTopicList = document.createElement('ul');
 				let find_topic_list_div = document.querySelector('#topicList');
-				unorderedTopicList.classList.add("list-disc");
+				
 
 
 				for (let i = 0; i < total_topics; i++) {
 					let listItem = document.createElement('li');
-					listItem.classList.add('list-item')
+					
 
 					//console.log(topicz[i])
 					listItem.innerText = topicz[i][0]["Level 1 Heading"];
@@ -71,7 +67,7 @@ function displayTopics(new_topic, Heading1TrackingNumber) {
 	let current_level_2 = '';
 	let listItem1 = document.querySelector(`#level1heading${Heading1TrackingNumber}`)
 	let level_2_headings_list = document.createElement('ul')
-	level_2_headings_list.classList.add("list-disc")
+	
 	listItem1.append(level_2_headings_list)
 	let counter = 0
 	let index_tracker = 0
@@ -85,7 +81,7 @@ function displayTopics(new_topic, Heading1TrackingNumber) {
 
 			counter++
 			let level_2_list_heading = document.createElement('li')
-			level_2_list_heading.classList.add('list-item')
+			
 			level_2_list_heading.innerHTML = head["Level 2 Heading"]
 			// add the level_2_list_heading to the level_2_headings_list
 			level_2_headings_list.append(level_2_list_heading);
@@ -100,7 +96,7 @@ function displayTopics(new_topic, Heading1TrackingNumber) {
 			level_2_list_heading.append(level_3_list_headings);
 			/*Create a list item to have the level 3 heading so that I can append it  to the level_3_list_headings*/
 			let level_3_list_heading = document.createElement('li');
-			level_3_list_heading.classList.add('list-item')
+			
 			level_3_list_heading.innerHTML = head["Level 3 Heading"];
 
 			level_3_list_heading.dataset.groupy = `${Heading1TrackingNumber}`
@@ -118,7 +114,7 @@ function displayTopics(new_topic, Heading1TrackingNumber) {
 			 the only thing I have to do is find that level 3 list and append a new level 3 list heading.*/
 			my_now_level_3_list = document.querySelector(`#level3list${Heading1TrackingNumber}${counter}`);
 			let new_list_item_to_add_the_new_level_3_heading = document.createElement('li');
-			new_list_item_to_add_the_new_level_3_heading.classList.add('list-item')
+			
 			new_list_item_to_add_the_new_level_3_heading.addEventListener('click', displayTopicFully(head))
 			new_list_item_to_add_the_new_level_3_heading.innerHTML = head["Level 3 Heading"];
 			new_list_item_to_add_the_new_level_3_heading.dataset.groupy = `${Heading1TrackingNumber}`;
