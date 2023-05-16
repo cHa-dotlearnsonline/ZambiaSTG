@@ -172,6 +172,7 @@ function displayTopicFully(topicz) {
 function drugInteractionSearch() {
 	// find the interaction checker button
 	let interactionCheckerButton = document.querySelector('#interactionSearchButton');
+	let interactionNav = document.querySelector('#Interaction-nav')
 	// add an event listen that hides both the list  and presentation topics 
 	interactionCheckerButton.addEventListener('click', () => {
 		// find the topic list and topic presentation then hide them.
@@ -182,20 +183,15 @@ function drugInteractionSearch() {
 		// find the div that has the interaction checker form and display it
 		let drugInteractionCheckerDiv = document.querySelector('#drugInteractionChecker');
 		drugInteractionCheckerDiv.style.display = 'block';
+		// hiding the interactions search button
+		interactionCheckerButton.style.display='none';
+		interactionNav.style.display='block'
 	});
 
 	document.querySelector('#interactionCheckerForm').addEventListener('submit', function (event) {
 		event.preventDefault();
 		searchDrug()
 	})
-
-	// find the search button
-	let searchButton = document.querySelector('#searchButton')
-	// i tried searchButton.addEventListener('click', searchDrug()) but that did not work
-	// so i did what you see below and somehow it works well. anyway I end here. 
-	searchButton.addEventListener('click', () => { searchDrug() })
-
-
 }
 
 // this function will actually search and decide where to send the search.
@@ -205,6 +201,9 @@ function searchDrug() {
 	// search for the single drug interaction button and see if it's been checked.
 	let singleDrug = document.querySelector('#interaction').checked
 	let compareDrugs = document.querySelector('#list').checked
+	let interactionDisplay = document.querySelector("#interactionDisplay")
+	interactionDisplay.innerHTML = ""
+
 	if (singleDrug) {
 		// get the value in the search box
 		let searchBoxValue = document.querySelector('#searchBox').value;
@@ -235,8 +234,10 @@ function searchDrug() {
 							interactionsGroupedArray.forEach(drugInteractionDataSource => {
 								let sourceName = drugInteractionDataSource["sourceName"]
 								let interactionTypeArray = drugInteractionDataSource["interactionType"]
+								
 								interactionTypeArray.forEach(interactionPairDataset => {
-									let interactionPairData = interactionPairDataset["interactionPair"]
+									let interactionPairData1 = interactionPairDataset["interactionPair"]
+									let interactionPairData = interactionPairData1
 									interactionPairData.forEach(interObject => {
 										all_inter++
 										let description = interObject["description"]
@@ -244,7 +245,17 @@ function searchDrug() {
 										let secondDrug = interObject["interactionConcept"][1]["minConceptItem"]["name"]
 										let severity = interObject["severity"]
 										console.log(`\n${firstDrug} vs ${secondDrug}\n\tSeverity: ${severity}\n\tDescription: ${description}\n\tSource: ${sourceName}`)
-
+										let interactionCard=	`
+										<div class="card text-center my-4 col-md-8 mx-auto">
+										<div class="card-body">
+										  <h5 class="card-title">${firstDrug} vs ${secondDrug}</h5>
+										  <p class="card-text">${description}</p
+										  <span>Severity:${severity}<span><br>
+										  <span>Source:${sourceName}<span>
+										</div>
+									  </div>
+									   `
+										  interactionDisplay.insertAdjacentHTML('beforeend', interactionCard)
 									})
 									
 								})
@@ -263,7 +274,7 @@ function searchDrug() {
 		let comparisonArray = searchBoxValue.split(',')
 		console.log(comparisonArray)
 		let the_codes_array = []
-
+		let invalidDrugEncountered = false // initialize flag variable
 		let promises = comparisonArray.map(drug => fetch(`https://rxnav.nlm.nih.gov/REST/rxcui.json?name=${drug}&search=1`).then(response => response.json()))
 		Promise.all(promises)
 			.then(dataArray => {
@@ -273,11 +284,14 @@ function searchDrug() {
 						let rxnormId = drugRxcui["idGroup"]["rxnormId"][0]
 						the_codes_array.push(rxnormId)
 					} else {
-						console.log("Please, enter a valid drug")
-						return
+				invalidDrugEncountered = true // set flag variable to true
+				console.log("Please, enter a valid drug")
 					}
 				})
 				console.log(the_codes_array)
+		if (invalidDrugEncountered && interactionDisplay.innerText.indexOf("Please, enter a valid drug")) { // check flag variable
+			interactionDisplay.append("Please, enter a valid drug") // append message only once
+		}
 				search_query = the_codes_array.join("+")
 				console.log(search_query)
 				fetch(`https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis=${search_query}`)
@@ -286,6 +300,7 @@ function searchDrug() {
 						console.log("We are now logging the drug interaction object or dictionary")
 
 						// Let's first check if this returned a group that has the interaction data.
+						
 						if (drugInteractionData.hasOwnProperty("fullInteractionTypeGroup")) {
 							let full_interaction_list = drugInteractionData["fullInteractionTypeGroup"]
 							console.log(drugInteractionData)
@@ -298,10 +313,32 @@ function searchDrug() {
 									let severity = subinteraction['interactionPair'][0]['severity']
 									let description = subinteraction['interactionPair'][0]['description']
 									console.log(`${drug1} vs ${drug2}\n\tSeverity:${severity}\n\t${description}\n\tSource:${information_source}\n\n`)
+								let interactionCard=	`<div class="card text-center my-4">
+									<div class="card-body">
+									  <h5 class="card-title">${drug1} vs ${drug2}</h5>
+									  <p class="card-text">${description}</p
+									  <span>Severity:${severity}<span><br>
+									  <span>Source:${information_source}<span>
+									</div>
+								  </div>`
+								  	interactionDisplay.insertAdjacentHTML('beforeend', interactionCard)
+																
 								})
 							})
 						} else {
+							interactionDisplay.innerHTML=""
 							console.log("The Database doesn't have the information you are looking for")
+							let message = "The Database doesn't have the information you are looking for"
+							let interactionCard=`
+							<div class="card text-center">
+									<div class="card-body">
+									  <h5 class="card-title"></h5>
+									  <p class="card-text">${message}</p>
+									  <span><span><br>
+									  <span><span>
+									</div>
+								  </div>`
+							interactionDisplay.insertAdjacentHTML('beforeend', interactionCard)
 						}
 
 
@@ -311,4 +348,9 @@ function searchDrug() {
 	} else {
 		let message = "Please Select what you would like to Search for"
 	}
+}
+
+// This funciotn will be here just to show what information to display to the user. 
+function showDrugInterations(where_to_display, interaction_to_display) {
+
 }

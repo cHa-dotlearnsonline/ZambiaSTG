@@ -3,34 +3,78 @@
 {% block body %}
 
 
-<div class="container">
-    <h1 class="text-3xl font-bold underline">Standard Treatment Guidelines</h1>
-    <button class="rounded-full bg-cyan-500 hover:bg-cyan-600" id="interactionSearchButton">Interaction Checker</button>
+<div class="container-fluid">
+   
+    
     <!-- Topic Lister -->
-    <div id="topicList">
+    <div class="container-fluid">
+        <div id="topicList">
+            <h1 >Standard Treatment Guidelines</h1>
+            <button class="btn btn-primary btn-sm" id="interactionSearchButton">Interaction Checker</button>
+        </div>
     </div>
+    
     <!-- topic presentation-->
     <div id="topicPresentation">
     </div>
-    <!-- drug interaction checker-->
-    <div class="list-disc" style="display:none;"></div>
-    <div class="list-decimal" style="display: none;"></div>
-    <div class="list-item" style="display: none;"></div>
+    
+</div>
+<!-- drug interaction checker-->
+<div> 
     <div id="drugInteractionChecker" style="display: none;">
-        <form id="interactionCheckerForm">
-            <input type="radio" checked="checked" id="interaction" name="interacter" value="Interaction">
-            <label for="interaction">Single Drug</label>
-            <input type="radio" id="list"  name="interacter" value="list">
-            <label for="list">Compare Drugs</label>
-            <div class="searchBoxDisplay" style="display:block;">
-                <input id="searchBox" name="search" type="text" placeholder="Enter the drug(s)">
-                <input type="button" class="rounded-full bg-cyan-500 hover:bg-cyan-600" id="searchButton" value="Search">
+    <nav id="Interaction-nav" class="navbar navbar-expand-lg bg-body-tertiary bg-white container-fluidtyle=">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Drug Interaction Checker</a>  
+    </div>
+  </nav>
+  <div class="d-flex justify-content-center align-items-center" style="height: 80vh;">
+    <div>
+        <div class="mx-auto text-center container-fluid">
+            <div>
+                <div class="d-flex flex-column align-items-center" id="interactionCheckerForm">
+                    <div class="d-flex flex-column align-items-center">
+                        <form class="mb-3 container-fluid" style="width: 70vw;">
+                          <div class="input-group col-8">
+                            <input type="text"  class="form-control" id="searchBox" style="box-shadow: none;" placeholder="Search for drug Interactions...">
+                            <button class="btn btn-outline-secondary btn-icon" id="searchButton" type="submit">
+                              <span class="bi bi-search"></span>
+                            </button>
+                          </div>
+                        </form>
+                        <div class="d-flex justify-content-between my-4">
+                              <div class="form-check mx-4">
+                                <input class="form-check-input" type="radio" id="interaction" name="interaction">
+                                <label class="form-check-label" for="interaction">
+                                    Single<i class="bi bi-capsule"></i>
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" id="list" name="interaction" checked>
+                                <label class="form-check-label" for="list">
+                                    Compare<i class="bi bi-capsule"></i><i class="bi bi-capsule"></i>
+                                </label>
+                              </div>
+                        </div>
+                      </div>
+
+                  </div>
+
+                
             </div>
-            
-        </form>
+        
+          </div>
+    </div>
+  </div>
+           <div class="container-fluid">
+              <div class="container-fluid " id="interactionDisplay">
+  
+                </div>
+          </div>
+
+ 
+
     </div>
 </div>
-
 
 {% endblock %} 
 {% block script %}
